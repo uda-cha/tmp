@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>test</title>
+    <script>
+      function getH3AndH4() {
+
+        var htmlList = document.getElementById('myfiles').files;
+
+        for (var i = 0; i < htmlList.length; i++) {
+
+          var div = document.createElement('div');
+          var reader = new FileReader();
+
+          div.style.display = 'none';
+          reader.readAsText(htmlList[i]);
+
+          reader.onload = function(e){
+            div.innerHTML = reader.result;
+            document.body.appendChild(div);
+            console.log(document.getElementsByTagName('h3')[0].innerText);
+            console.log(document.getElementsByTagName('h4')[0].innerText);
+            document.body.removeChild(div);
+          };
+          delete reader;
+        };
+
+      };
+    </script>
+  </head>
+  <body>
+    htmlファイルを選択して下さい(複数選択可)。<br/>
+    <input type="file" id="myfiles" name="filename" accept=".html" multiple/>
+    <input type="button" value="実行" onclick=getH3AndH4();>
+    <output id="list"></output>
+  </body>
+</html>
