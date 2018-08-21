@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>test</title>
+    <style>
+      div { display: 'none'; }
+    </style>
+  </head>
+  <body>
+    <script language="JavaScript">
+
+      function parseHtml(_file) {
+        var reader = new FileReader();
+
+        reader.readAsText(_file);
+
+        reader.onload = function(e) {
+          var fileName = _file.name;
+          var tmpDiv = document.createElement('div');
+          var resultLi = document.createElement('li');
+
+          tmpDiv.innerHTML = reader.result;
+          document.body.appendChild(tmpDiv);
+          h4 = document.getElementsByTagName('h4')[0].innerText;
+          nextH6 = document.getElementsByTagName('h6')[0].nextElementSibling.innerText;
+          document.body.removeChild(tmpDiv);
+
+          resultLi.innerHTML = nextH6 + " " + fileName + " " + h4;
+          document.getElementById('resultList').appendChild(resultLi);
+        };
+      };
+
+      function main() {
+        var htmlList = document.getElementById('myfiles').files;
+
+        for (var i = 0; i < htmlList.length; i++) {
+          parseHtml(htmlList[i]);
+        };
+      };
+
+      function reset() {
+        var rmList = document.getElementById('resultList');
+
+        while (rmList.lastChild) {
+          rmList.removeChild(rmList.lastChild);
+        };
+      };
+
+    </script>
+
+    <h1>Nessus診断結果htmlパースツール</h1>
+    <h2>使い方</h2>
+    <p>htmlファイルを選択して下さい(複数選択可)。<br/>
+    ｢実行｣をクリックすると、各htmlのh6要素の次の要素、htmlファイル名、h4要素をスペース区切りで列挙します。<br/>
+    コピーしてエクセルなどに張り付けて利用してください。<br/>
+    また、Nessus診断結果htmlにおいては、各要素は以下の意味を持ちます。
+    <ul>
+      <li>h6要素の次の要素：IPアドレス</li>
+      <li>h4要素：診断実行日時</li>
+    </ul></p>
+    <h2>注意点</h2>
+    <p>IEから利用する場合、設定→互換表示設定から、以下のチェックを外してください。<br/>
+    <ul>
+      <li>イントラネット　サイトを互換表示で表示する</li>
+      <li>Microsoft互換性リストの使用</li>
+    </ul></p>
+    <input type="file" id="myfiles" name="filename" accept=".html" multiple/>
+    <input type="button" value="実行" onclick=main();>
+    <input type="button" value="クリア" onclick=reset();>
+    <ul id="resultList"></ul>
+  </body>
+</html>
