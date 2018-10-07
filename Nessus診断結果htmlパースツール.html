@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>test</title>
+    <title>Nessus診断結果htmlパースツール</title>
     <style>
       div { display: 'none'; }
     </style>
@@ -22,11 +22,30 @@
 
           tmpDiv.innerHTML = reader.result;
           document.body.appendChild(tmpDiv);
-          h4 = document.getElementsByTagName('h4')[0].innerText;
-          nextH6 = document.getElementsByTagName('h6')[0].nextElementSibling.innerText;
+          
+          
+          //h4要素(=診断実行日時)の取得
+          elmH4 = document.getElementsByTagName('h4')[0].innerText;
+          
+          //h6要素の次の要素(=IPアドレス)の取得
+          elmNextH6 = document.getElementsByTagName('h6')[0].nextElementSibling.innerText;
+          
+          //#d43f3aがクラス名の要素(CRITICALのぜい弱性数)の取得
+          elmd43f3a = document.getElementsByClassName('#d43f3a')[0].innerText;
+          
+          //#ee9336がクラス名の要素(HIGHのぜい弱性数)の取得
+          elmee9336 = document.getElementsByClassName('#ee9336')[0].innerText;
+          
+          //#fdc431がクラス名の要素(MEDIUMのぜい弱性数)の取得
+          elmfdc431 = document.getElementsByClassName('#fdc431')[0].innerText;
+          
+          //#3fae49がクラス名の要素(LOWのぜい弱性数)の取得
+          elm3fae49 = document.getElementsByClassName('#3fae49')[0].innerText;
+          
+          
           document.body.removeChild(tmpDiv);
 
-          resultLi.innerHTML = nextH6 + " " + fileName + " " + h4;
+          resultLi.innerHTML = elmNextH6 + " " + fileName + " " + elmH4 + " " + elmd43f3a + " " + elmee9336 + " " + elmfdc431 + " " + elm3fae49;
           document.getElementById('resultList').appendChild(resultLi);
         };
       };
@@ -52,19 +71,29 @@
     <h1>Nessus診断結果htmlパースツール</h1>
     <h2>使い方</h2>
     <p>htmlファイルを選択して下さい(複数選択可)。<br/>
-    ｢実行｣をクリックすると、各htmlのh6要素の次の要素、htmlファイル名、h4要素をスペース区切りで列挙します。<br/>
-    コピーしてエクセルなどに張り付けて利用してください。<br/>
-    また、Nessus診断結果htmlにおいては、各要素は以下の意味を持ちます。
+    ｢実行｣をクリックすると、各htmlの以下のような要素を、｢スペース区切り｣で列挙します。<br/>
+    コピーしてエクセルなどに張り付け、スペースでデータ区切りを実施した上で利用してください。<br/>
     <ul>
-      <li>h6要素の次の要素：IPアドレス</li>
-      <li>h4要素：診断実行日時</li>
+      <li>h6要素の次の要素(Nessus結果htmlでは、IPアドレスを意味する。以下同様)</li>
+      <li>htmlファイル名</li>
+      <li>h4要素(診断実行日時)</li>
+      <li>クラス名が｢#d43f3a｣の要素(CRITICALのぜい弱性数)</li>
+      <li>クラス名が｢#ee9336｣の要素(HIGHのぜい弱性数)</li>
+      <li>クラス名が｢#fdc431｣の要素(MEDIUMのぜい弱性数)</li>
+      <li>クラス名が｢#3fae49｣の要素(LOWのぜい弱性数)</li>
     </ul></p>
     <h2>注意点</h2>
-    <p>IEから利用する場合、設定→互換表示設定から、以下のチェックを外してください。<br/>
-    <ul>
-      <li>イントラネット　サイトを互換表示で表示する</li>
-      <li>Microsoft互換性リストの使用</li>
-    </ul></p>
+    <p>
+      <ul>
+      <li>IEから利用する場合、設定→互換表示設定から、以下のチェックを外してください。<br/>
+        <ul>
+          <li>イントラネット　サイトを互換表示で表示する</li>
+          <li>Microsoft互換性リストの使用</li>
+        </ul></li>
+      <li>Nessus結果htmlには、ホスト1台分の結果が記載されていることを前提とします。</br>
+        本パースツールは、一度のNessus診断で複数ホストに実行したNessus結果htmlをサポートしません。</li>
+      </ul>
+    </p>
     <input type="file" id="myfiles" name="filename" accept=".html" multiple/>
     <input type="button" value="実行" onclick=main();>
     <input type="button" value="クリア" onclick=reset();>
